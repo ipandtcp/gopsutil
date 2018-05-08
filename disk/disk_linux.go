@@ -13,7 +13,7 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/shirou/gopsutil/internal/common"
+	"github.com/ipandtcp/gopsutil/internal/common"
 )
 
 const (
@@ -302,6 +302,14 @@ func IOCountersWithContext(ctx context.Context, names ...string) (map[string]IOC
 			// malformed line in /proc/diskstats, avoid panic by ignoring.
 			continue
 		}
+		majorNum, err := strconv.ParseUint((fields[0]), 10, 64)
+		if err != nil {
+			return ret, err
+		}
+		minorNum, err := strconv.ParseUint((fields[1]), 10, 64)
+		if err != nil {
+			return ret, err
+		}
 		name := fields[2]
 
 		if len(names) > 0 && !common.StringsHas(names, name) {
@@ -353,6 +361,8 @@ func IOCountersWithContext(ctx context.Context, names ...string) (map[string]IOC
 			return ret, err
 		}
 		d := IOCountersStat{
+			MajorNum:	  majorNum,
+			MinorNum:	  minorNum,
 			ReadBytes:        rbytes * SectorSize,
 			WriteBytes:       wbytes * SectorSize,
 			ReadCount:        reads,

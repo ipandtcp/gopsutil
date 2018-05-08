@@ -3,7 +3,7 @@ package disk
 import (
 	"encoding/json"
 
-	"github.com/shirou/gopsutil/internal/common"
+	"github.com/ipandtcp/gopsutil/internal/common"
 )
 
 var invoke common.Invoker = common.Invoke{}
@@ -29,6 +29,8 @@ type PartitionStat struct {
 }
 
 type IOCountersStat struct {
+	MajorNum	 uint64 `json:"majorNumber"`
+	MinorNum	 uint64 `json:"minorNumber"`
 	ReadCount        uint64 `json:"readCount"`
 	MergedReadCount  uint64 `json:"mergedReadCount"`
 	WriteCount       uint64 `json:"writeCount"`
